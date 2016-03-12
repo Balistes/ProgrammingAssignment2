@@ -6,17 +6,22 @@
 ## Function makeCacheMatrix creates a special "matrix" object that can cache its inverse.
 ## makeCacheMatrix creates and returns a list of functions
 makeCacheMatrix <- function(x = matrix()) {
-     m <- NULL
-     set <- function(y) {
-       x <<- y
-       m <<- NULL
+     if(ncol(x) == nrow(x)) {   # check that matrix is square
+          m <- NULL
+          set <- function(y) {
+          x <<- y
+          m <<- NULL
+          }
+          get <- function() x
+          setinv <- function(solve) m <<- solve
+          getinv <- function() m
+          list(set = set, get = get,
+               setinv = setinv,
+               getinv = getinv)
      }
-     get <- function() x
-     setinv <- function(inv) m <<- inv
-     getinv <- function() m
-     list(set = set, get = get,
-          setinv = setinv,
-          getinv = getinv)
+     else {
+       message("Error. Matrix must be square")
+     }
 }
 
 ## Function cacheSolve computes the inverse of the special "matrix" returned by makeCacheMatrix above.
